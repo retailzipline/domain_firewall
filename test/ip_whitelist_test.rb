@@ -14,6 +14,13 @@ class IPWhitelistTestTest < Minitest::Test
       delegate: DelegateStubber))
   end
 
+  def test_whitelisted_returning_true_value_allows_any_ip
+    DelegateStubber.stub(:whitelist, true) do
+      response = @request.get("/", "REMOTE_ADDR" => "1.1.1.1")
+      assert_equal([200, 'Success'], [response.status, response.body])
+    end
+  end
+
   def test_whitelisted_ip
     DelegateStubber.stub(:whitelist, "1.1.1.1") do
       response = @request.get("/", "REMOTE_ADDR" => "1.1.1.1")

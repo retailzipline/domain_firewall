@@ -11,13 +11,14 @@ module DomainFirewall
     def call(env)
       req = Rack::Request.new(env)
       uri = URI(req.url)
-      white_list = Array(@delegate.whitelist(uri.host))
+      white_list = @delegate.whitelist(uri.host)
 
       # allow the current request if it is the same as our [url] option.
       return @app.call(env) if @url && @url == req.path
 
       response = Rack::Response.new
-      if white_list.any?{|ip| req.ip =~ regexp_for_ip(ip)}
+      if white_list == true || Array(white_list).any?{|ip|
+        req.ip =~ regexp_for_ip(ip)}
         @app.call(env)
       else
         if @url
