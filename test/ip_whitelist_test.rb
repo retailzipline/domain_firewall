@@ -85,9 +85,7 @@ class IPWhitelistTestTest < Minitest::Test
 
   def test_whitelisted_ips_containing_multiple_wildcards
     DelegateStubber.stub(:whitelist, "1.*.1.*") do
-      puts "*******"
       response = @request.get("/", "REMOTE_ADDR" => "1.1.2.1")
-      puts "*******"
       assert_equal(403, response.status)
     end
   end
