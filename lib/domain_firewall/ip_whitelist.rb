@@ -16,24 +16,28 @@ module DomainFirewall
       # allow the current request if it is the same as our [url] option.
       return @app.call(env) if @url && @url == req.path
 
-      response = Rack::Response.new
-      if white_list == true || Array(white_list).any?{|ip|
-        req.ip =~ regexp_for_ip(ip)}
-        @app.call(env)
-      else
-        if @url
-          response.redirect(@url, 303)
-        else
-          response.status = 403
-          response.body = [Rack::Utils::HTTP_STATUS_CODES[403]]
-        end
-        response.finish
-      end
+      matches?(req.ip, white_list) ? @app.call(env) : halt_chain_with_response
     end
 
     private
 
-    # @param ip [String] a string represnting an ip. Wildcards (*) are
+    def halt_chain_with_response
+      response = Rack::Response.new
+      if @url
+        response.redirect(@url, 303)
+      else
+        response.status = 403
+        response.body = [Rack::Utils::HTTP_STATUS_CODES[403]]
+      end
+      response.finish
+    end
+
+    def matches?(request_ip, white_list)
+      return true if white_list === true
+      Array(white_list).any? { |ip| request_ip =~ regexp_for_ip(ip) }
+    end
+
+    # @param ip [String] a string representing an ip. Wildcards (*) are
     # acceptable.
     # @return [Regexp]
     def regexp_for_ip ip

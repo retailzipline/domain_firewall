@@ -6,21 +6,13 @@ require 'domain_firewall/version'
 Gem::Specification.new do |spec|
   spec.name          = "domain_firewall"
   spec.version       = DomainFirewall::VERSION
-  spec.authors       = ["Dave Vallance"]
-  spec.email         = ["davevallance@gmail.com"]
+  spec.authors       = ["Dave Vallance", "Jeremy Baker"]
+  spec.email         = ["davevallance@gmail.com", "jhubert@gmail.com"]
 
-  spec.summary       = %q{Domain based firewall controls.}
-  spec.description   = %q{Domain based firewall controls.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Rack middleware for whitelisting IP addresses}
+  spec.description   = %q{Rack middleware for whitelisting IP addresses. Allows you to define a custom whitelist per domain.}
+  spec.homepage      = "https://github.com/retailzipline/domain_firewall"
   spec.license       = "MIT"
-
-  # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
-  # delete this section to allow pushing this gem to any host.
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
-  else
-    raise "RubyGems 2.0 or newer is required to protect against public gem pushes."
-  end
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
